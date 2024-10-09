@@ -1,6 +1,6 @@
 ## Descripción del Script
 
-El script `instalar_agente_zabbix.ps1` automatiza la instalación y configuración del agente de Zabbix en servidores Windows. Acepta parámetros de línea de comandos para mayor flexibilidad y facilidad de uso, permitiendo a los usuarios especificar la dirección IP del servidor Zabbix y acceder a una ayuda integrada.
+El script `instalar_agente_zabbix.ps1` automatiza la instalación y configuración del agente de Zabbix en servidores Windows. Para mayor flexibilidad y facilidad de uso, permite a los usuarios especificar la dirección IP del servidor Zabbix.
 
 #### Comando de Instalación en 1 linea:
 
