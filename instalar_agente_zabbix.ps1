@@ -9,6 +9,7 @@ $zabbixZipUrl = "https://cdn.zabbix.com/zabbix/binaries/stable/6.4/6.4.19/zabbix
 $zabbixZipPath = "$env:TEMP\zabbix_agent.zip"
 $zabbixConf = "$zabbixFolder\conf\zabbix_agentd.conf"
 $logFilePath = "$zabbixFolder\zabbix_agentd.log"
+$ServerIp = "0.0.0.0"
 
 # Crear carpeta Zabbix si no existe
 if (-not (Test-Path -Path $zabbixFolder)) {
