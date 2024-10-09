@@ -5,7 +5,7 @@ El script `instalar_agente_zabbix.ps1` automatiza la instalación y configuraci�
 #### Comando de Instalación en 1 linea:
 
 ```powershell
-Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Baraghost/agente_zabbix_windows/refs/heads/main/instalar_agente_zabbix.ps1" -UseBasicParsing).Content -ServerIp "192.168.1.100"
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Baraghost/agente_zabbix_windows/main/instalar_agente_zabbix.ps1" -UseBasicParsing).Content
 ```
 
-**Importante:** Asegúrate de reemplazar la ip por la de tu Server de Zabbix.
+**Importante:** Asegúrate de colocar la IP del servidor de Zabbix al momento que te lo solicite el script.
