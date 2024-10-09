@@ -1,8 +1,3 @@
-param (
-    [Parameter(Mandatory = $true)]
-    [string]$ServerIp
-)
-
 # Ruta de instalación y archivo ZIP del agente Zabbix
 $zabbixFolder = "C:\zabbix"
 $zabbixZipUrl = "https://cdn.zabbix.com/zabbix/binaries/stable/6.4/6.4.19/zabbix_agent-6.4.19-windows-amd64.zip"
@@ -44,6 +39,9 @@ if (-not (Test-Path -Path $zabbixConf)) {
     Write-Error "El archivo de configuración no se encontró: $zabbixConf"
     exit 1
 }
+
+# Solicitar la IP del Servidor Zabbix
+$ServerIp = Read-Host "Ingrese la IP del servidor Zabbix"
 
 # Editar el archivo de configuración para agregar el Server y LogFile
 Write-Host "Editando el archivo de configuración..."
