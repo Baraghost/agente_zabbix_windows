@@ -122,8 +122,8 @@ catch {
     
 }
 
-# Crear una tarea programada para reiniciar el agente cada 2 horas
-Write-Host "Creando tarea programada para reiniciar el agente Zabbix cada 2 horas..." -ForegroundColor Yellow
+# Crear una tarea programada para reiniciar el agente cada 1 hora
+Write-Host "Creando tarea programada para reiniciar el agente Zabbix cada 1 hora..." -ForegroundColor Yellow
 $taskName = "Zabbix Service Restart"
 
 # Verificar si la tarea ya existe
@@ -137,13 +137,16 @@ else {
         # Definir la acción
         $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c "$batFilePath""
         
-        # Definir el trigger para iniciar al inicio y repetir cada 2 hora indefinidamente
-        $trigger = New-ScheduledTaskTrigger -AtStartup
-        $trigger.RepetitionInterval = (New-TimeSpan -Hours 1)
-        $trigger.RepetitionDuration = [TimeSpan]::MaxValue  # Repetir indefinidamente
+        # Definir el trigger para iniciar al inicio y repetir cada 1 hora indefinidamente
+        $now = Get-Date
+        $interval = New-TimeSpan -Hours 1
+        $forever = [System.TimeSpan]::MaxValue
+        $trigger = New-ScheduledTaskTrigger -Once -At $now -RepetitionInterval $interval 
+        $settings = New-ScheduledTaskSettingsSet
+        $task = New-ScheduledTask -Action $action -Trigger $trigger -Settings $settings
         
         # Registrar la tarea programada
-        Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskName -Description "Reinicia el Agente Zabbix cada 1 hora" -User "SYSTEM" -RunLevel Highest -Force
+        Register-ScheduledTask -TaskName $taskName -InputObject $task -Description "Reinicia el Agente Zabbix cada 1 hora" -User "SYSTEM" -RunLevel Highest -Force
         Write-Host "Tarea programada '$taskName' creada exitosamente." -ForegroundColor Green
     }
     catch {
