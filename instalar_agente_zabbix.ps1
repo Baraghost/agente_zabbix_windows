@@ -10,11 +10,11 @@ if (-not (Test-Path -Path $zabbixFolder)) {
     New-Item -Path $zabbixFolder -ItemType Directory -Force
     Write-Host "Carpeta $zabbixFolder creada." -ForegroundColor Green
 } else {
-    Write-Host "La carpeta $zabbixFolder ya existe." -ForegroundColor Orange
+    Write-Host "La carpeta $zabbixFolder ya existe." -ForegroundColor Cyan
 }
 
 # Descargar el archivo ZIP del agente
-Write-Host "Descargando Zabbix Agent desde $zabbixZipUrl..." -ForegroundColor DarkYellow
+Write-Host "Descargando Zabbix Agent desde $zabbixZipUrl..." -ForegroundColor Yellow
 try {
     Invoke-WebRequest -Uri $zabbixZipUrl -OutFile $zabbixZipPath -ErrorAction Stop
     Write-Host "Descarga completada: $zabbixZipPath" -ForegroundColor Green
@@ -24,7 +24,7 @@ try {
 }
 
 # Extraer el contenido del ZIP a la carpeta de Zabbix
-Write-Host "Extrayendo Zabbix Agent en $zabbixFolder..." -ForegroundColor DarkYellow
+Write-Host "Extrayendo Zabbix Agent en $zabbixFolder..." -ForegroundColor Yellow
 try {
     Expand-Archive -Path $zabbixZipPath -DestinationPath $zabbixFolder -Force
     Write-Host "Extracción completada." -ForegroundColor Green
@@ -40,10 +40,10 @@ if (-not (Test-Path -Path $zabbixConf)) {
 }
 
 # Solicitar la IP del Servidor Zabbix
-$ServerIp = Read-Host "Ingrese la IP del servidor Zabbix" -ForegroundColor DarkYellow
+$ServerIp = Read-Host "Ingrese la IP del servidor Zabbix" -ForegroundColor Yellow
 
 # Editar el archivo de configuración para agregar el Server y LogFile
-Write-Host "Editando el archivo de configuración..." -ForegroundColor DarkYellow
+Write-Host "Editando el archivo de configuración..." -ForegroundColor Yellow
 try {
     # Reemplazar la línea de LogFile
     (Get-Content -Path $zabbixConf) -replace "^LogFile=.*", "LogFile=$logFilePath" | Set-Content -Path $zabbixConf
@@ -58,7 +58,7 @@ try {
 }
 
 # Instalar el agente Zabbix
-Write-Host "Instalando Zabbix Agent..." -ForegroundColor DarkYellow
+Write-Host "Instalando Zabbix Agent..." -ForegroundColor Yellow
 try {
     Start-Process -FilePath "$zabbixFolder\bin\zabbix_agentd.exe" -ArgumentList "--config `"$zabbixConf`" --install" -NoNewWindow -Wait
     Write-Host "Zabbix Agent instalado correctamente." -ForegroundColor Green
@@ -68,7 +68,7 @@ try {
 }
 
 # Iniciar el agente Zabbix
-Write-Host "Iniciando Zabbix Agent..." -ForegroundColor DarkYellow
+Write-Host "Iniciando Zabbix Agent..." -ForegroundColor Yellow
 try {
     Start-Process -FilePath "$zabbixFolder\bin\zabbix_agentd.exe" -ArgumentList "--config `"$zabbixConf`" --start" -NoNewWindow -Wait
     Write-Host "Zabbix Agent iniciado correctamente." -ForegroundColor Green
@@ -78,12 +78,12 @@ try {
 }
 
 # Configurar las reglas del firewall
-Write-Host "Configurando reglas de firewall..." -ForegroundColor DarkYellow
+Write-Host "Configurando reglas de firewall..." -ForegroundColor Yellow
 $firewallRuleName = "Zabbix Agent"
 $existingRule = Get-NetFirewallRule -DisplayName $firewallRuleName -ErrorAction SilentlyContinue
 
 if ($existingRule) {
-    Write-Host "La regla de firewall '$firewallRuleName' ya existe." -ForegroundColor Orange
+    Write-Host "La regla de firewall '$firewallRuleName' ya existe." -ForegroundColor Cyan
 } else {
     try {
         New-NetFirewallRule -DisplayName $firewallRuleName -Direction Inbound -Action Allow -Protocol TCP -LocalPort 10050 -RemoteAddress $ServerIp -Enabled True
@@ -95,7 +95,7 @@ if ($existingRule) {
 }
 
 # Crear archivo ZabbixAgent.bat para reiniciar el agente
-Write-Host "Creando archivo ZabbixAgent.bat para reiniciar el agente..." -ForegroundColor DarkYellow
+Write-Host "Creando archivo ZabbixAgent.bat para reiniciar el agente..." -ForegroundColor Yellow
 $batContent = @"
 @echo off
 C:\zabbix\bin\zabbix_agentd.exe --config C:\zabbix\conf\zabbix_agentd.conf --stop
@@ -114,14 +114,14 @@ try {
 }
 
 # Crear una tarea programada para reiniciar el agente cada 2 horas
-Write-Host "Creando tarea programada para reiniciar el agente Zabbix cada 2 horas..." -ForegroundColor DarkYellow
+Write-Host "Creando tarea programada para reiniciar el agente Zabbix cada 2 horas..." -ForegroundColor Yellow
 $taskName = "Zabbix Service Restart"
 
 # Verificar si la tarea ya existe
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 
 if ($existingTask) {
-    Write-Host "La tarea programada '$taskName' ya existe." -ForegroundColor Orange
+    Write-Host "La tarea programada '$taskName' ya existe." -ForegroundColor Cyan
 } else {
     try {
         # Definir la acción
