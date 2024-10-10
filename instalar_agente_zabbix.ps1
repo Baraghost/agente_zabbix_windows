@@ -123,18 +123,18 @@ catch {
 }
 
 # Crear una tarea programada para reiniciar el agente
-Write-Host "Creando tarea programada para reiniciar el agente Zabbix..." -ForegroundColor Yellow
+Write-Host "Creando tarea programada para reiniciar el agente Zabbix cada 2 horas..." -ForegroundColor Yellow
 $taskName = "Zabbix Service Restart"
 
 $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$batFilePath`""
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1)
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Hours 2)
 
 try {
     Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskName -Description "Reinicia el Agente Zabbix" -User "SYSTEM" -RunLevel Highest -Force
     Write-Host "Tarea programada '$taskName' creada exitosamente." -ForegroundColor Green
 } catch {
-    Write-Error "Error al crear la tarea programada: $_" 
+    Write-Error "Error al crear la tarea programada: $_"
 }
 
 
-Write-Host "Instalación y configuración completa." -ForegroundColor Green
+Write-Host "Instalacion y configuracion completadas." -ForegroundColor Green
