@@ -19,7 +19,7 @@ try {
     Invoke-WebRequest -Uri $zabbixZipUrl -OutFile $zabbixZipPath -ErrorAction Stop
     Write-Host "Descarga completada: $zabbixZipPath" -ForegroundColor Green
 } catch {
-    Write-Error "Error al descargar el agente Zabbix: $_" -ForegroundColor Red
+    Write-Error "Error al descargar el agente Zabbix: $_" 
     exit 1
 }
 
@@ -29,13 +29,13 @@ try {
     Expand-Archive -Path $zabbixZipPath -DestinationPath $zabbixFolder -Force
     Write-Host "Extracción completada." -ForegroundColor Green
 } catch {
-    Write-Error "Error al extraer el agente Zabbix: $_" -ForegroundColor Red
+    Write-Error "Error al extraer el agente Zabbix: $_" 
     exit 1
 }
 
 # Verificar si el archivo de configuración existe
 if (-not (Test-Path -Path $zabbixConf)) {
-    Write-Error "El archivo de configuración no se encontró: $zabbixConf" -ForegroundColor Red
+    Write-Error "El archivo de configuración no se encontró: $zabbixConf" 
     exit 1
 }
 
@@ -53,7 +53,7 @@ try {
     
     Write-Host "Archivo de configuración actualizado." -ForegroundColor Green
 } catch {
-    Write-Error "Error al editar el archivo de configuración: $_" -ForegroundColor Red
+    Write-Error "Error al editar el archivo de configuración: $_" 
     exit 1
 }
 
@@ -63,7 +63,7 @@ try {
     Start-Process -FilePath "$zabbixFolder\bin\zabbix_agentd.exe" -ArgumentList "--config `"$zabbixConf`" --install" -NoNewWindow -Wait
     Write-Host "Zabbix Agent instalado correctamente." -ForegroundColor Green
 } catch {
-    Write-Error "Error al instalar el agente Zabbix: $_" -ForegroundColor Red
+    Write-Error "Error al instalar el agente Zabbix: $_" 
     exit 1
 }
 
@@ -73,7 +73,7 @@ try {
     Start-Process -FilePath "$zabbixFolder\bin\zabbix_agentd.exe" -ArgumentList "--config `"$zabbixConf`" --start" -NoNewWindow -Wait
     Write-Host "Zabbix Agent iniciado correctamente." -ForegroundColor Green
 } catch {
-    Write-Error "Error al iniciar el agente Zabbix: $_" -ForegroundColor Red
+    Write-Error "Error al iniciar el agente Zabbix: $_" 
     exit 1
 }
 
@@ -89,7 +89,7 @@ if ($existingRule) {
         New-NetFirewallRule -DisplayName $firewallRuleName -Direction Inbound -Action Allow -Protocol TCP -LocalPort 10050 -RemoteAddress $ServerIp -Enabled True
         Write-Host "Regla de firewall creada para el puerto 10050/TCP desde $ServerIp." -ForegroundColor Green
     } catch {
-        Write-Error "Error al crear la regla de firewall: $_" -ForegroundColor Red
+        Write-Error "Error al crear la regla de firewall: $_" 
         exit 1
     }
 }
@@ -109,7 +109,7 @@ try {
     Set-Content -Path $batFilePath -Value $batContent -Force
     Write-Host "Archivo ZabbixAgent.bat creado en $batFilePath." -ForegroundColor Green
 } catch {
-    Write-Error "Error al crear el archivo ZabbixAgent.bat: $_" -ForegroundColor Red
+    Write-Error "Error al crear el archivo ZabbixAgent.bat: $_" 
     exit 1
 }
 
@@ -136,7 +136,7 @@ if ($existingTask) {
         Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskName -Description "Reinicia el Agente Zabbix cada 2 horas" -User "SYSTEM" -RunLevel Highest -Force
         Write-Host "Tarea programada '$taskName' creada exitosamente." -ForegroundColor Green
     } catch {
-        Write-Error "Error al crear la tarea programada: $_" -ForegroundColor Red
+        Write-Error "Error al crear la tarea programada: $_" 
         exit 1
     }
 }
